@@ -1,0 +1,37 @@
+#!/bin/bash
+
+get_script_dir () {
+    pushd $(dirname "${BASH_SOURCE[0]}") >/dev/null
+    pwd
+    popd >/dev/null
+}
+
+THIS_DIR="$(get_script_dir)"
+BASE_DIR="$(dirname "$THIS_DIR")"
+BASE_NAME="$(basename "$BASE_DIR")"
+base_name="$(echo $BASE_NAME | tr ' [:upper:]' '_[:lower:]')"
+
+if ! which docker > /dev/null
+then
+    echo "you must install/run docker..."
+    echo 'mac:'
+    echo '    open "https://download.docker.com/mac/stable/Docker.dmg"'
+    echo 'win:'
+    echo '    start "https://download.docker.com/win/stable/Docker%20for%20Windows%20Installer.exe"'
+    echo 'ubuntu:'
+    echo "    bash \"$BASE_DIR/bin/setup-docker-ubuntu.sh\""
+    exit 1
+fi
+
+
+
+(cd "$BASE_DIR/dockers" && docker build -t "$base_name/latex-base:latest" latex-base)
+
+if [ ! -f "$BASE_DIR/dockers/latex/Dockerfile " ] ; then
+cat >"$BASE_DIR/dockes/latex/Dockerfile" <<EOF
+FROM "$base_name/latex-base:latest"
+# Comment out and replace with specific libraries for a smaller docker
+
+RUN tlmgr install scheme-full
+EOF
+fi

@@ -1,0 +1,28 @@
+#!/bin/bash
+
+get_script_dir () {
+    pushd $(dirname "${BASH_SOURCE[0]}") >/dev/null
+    pwd
+    popd >/dev/null
+}
+
+THIS_DIR="$(get_script_dir)"
+BASE_DIR="$(dirname "$THIS_DIR")"
+BASE_NAME="$(basename "$BASE_DIR")"
+base_name="$(echo $BASE_NAME | tr ' [:upper:]' '_[:lower:]')"
+
+
+"$THIS_DIR"/latex-docker-setup-base
+
+(cd "$BASE_DIR/dockers" && docker build -t "$base_name/latex:latest" latex)
+
+echo "Type ". ./bin/latex-docker-context" in the project base directory ($BASE_DIR) to set your PATH"
+
+CMDS="$(docker run --rm -a stdin -a stdout "$base_name/latex:latest" /bin/sh -c 'ls `echo $PATH  | cut -d: -f1`')"
+
+cd "$BASE_DIR/bin"
+for cmd in $CMDS
+do
+    ln -s "latex-docker-command" "$cmd"
+    chmod +x "$BASE_DIR/bin/$cmd"
+done
