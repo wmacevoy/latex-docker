@@ -26,7 +26,7 @@ Version is based on ubuntu xenial:
 Use
 ------------
 
-```
+```bash
 cd my_latex_source
 
 curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zx --strip=1
@@ -44,9 +44,8 @@ bin/setup-latex-docker
 
 pdflatex main.tex
 
-More explicitly
+# More explicitly
 
-```bash
 bin/latex-docker <comand> <args..>
 ```
 
