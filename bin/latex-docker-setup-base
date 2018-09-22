@@ -29,7 +29,7 @@ fi
 
 if [ ! -f "$BASE_DIR/dockers/latex/Dockerfile " ] ; then
     mkdir -p "$BASE_DIR/dockers/latex"
-    cat >"$BASE_DIR/dockes/latex/Dockerfile" <<EOF
+    cat >"$BASE_DIR/dockers/latex/Dockerfile" <<EOF
 FROM "$base_name/latex-base:latest"
 # Comment out and replace with specific libraries for a smaller docker
 
