@@ -41,7 +41,7 @@ After untarring/forking, you can buid the base docker with
 ```bash
 bin/latex-docker-setup-base
 ```
-If you want less than the full texlive, you can edit `dockers/latex/Dockerfile` to decide what you want.
+If you want less than the full (5+ GB) texlive, you can edit `dockers/latex/Dockerfile` to decide what you want.
 
 The first time, and after any changes to the Dockerfile(s), you can re-create them and hooks for them with
 ```bash
