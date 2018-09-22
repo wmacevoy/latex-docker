@@ -16,13 +16,27 @@ base_name="$(echo $BASE_NAME | tr ' [:upper:]' '_[:lower:]')"
 
 (cd "$BASE_DIR/dockers" && docker build -t "$base_name/latex:latest" latex)
 
-echo "Type ". bin/latex-docker-context" in the project base directory ($BASE_DIR) to set your PATH"
-
 CMDS="$(docker run --rm -a stdin -a stdout "$base_name/latex:latest" /bin/sh -c 'ls `echo $PATH  | cut -d: -f1`')"
 
 cd "$BASE_DIR/bin"
 for cmd in $CMDS
 do
+    /bin/rm -rf "$cmd"
     ln -s "latex-docker-command" "$cmd"
     chmod +x "$BASE_DIR/bin/$cmd"
 done
+
+cat >"$BASE_DIR/bin/latex-docker-context" <<EOF  
+#!/bin/bash
+if ! echo \$PATH | egrep "(^|:)$BASE_DIR/bin(:|\$)" >/dev/null
+then
+   export PATH="$BASE_DIR/bin:\$PATH"
+   hash -r
+else
+   echo "$BASE_DIR/bin is already in your path"
+fi
+EOF
+
+echo "Type ". bin/latex-docker-context" in the project base directory ($BASE_DIR) to set your PATH"
+
+
