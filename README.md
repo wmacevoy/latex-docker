@@ -1,7 +1,8 @@
 Latex docker container 
 ======================
 
-This container helps compiling latex sources without the need to install all latex packages on your system.
+This container helps compiling latex sources without the need to install all latex packages on your system, and keeps those containers
+on a per-project basis, so old and new package dependencies do not conflict.
 
 Why should I use this container?
 -----
