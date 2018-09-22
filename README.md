@@ -16,11 +16,11 @@ Why should I use this container?
 
 Versions
 --------
-Version is based on ubuntu xenial:
+Version is based on ubuntu xenial (16.04):
 
 - [`<dir>/latex-base:latest`](dockers/latex-base/Dockerfile)
 -- CTAN TexLive Scheme-basic: Up-to-date, only basic packages, base for custom builds (500MB)
-- [`<dir>/latex:latest`](dockers/latex/Dockerfile)
+- `<dir>/latex:latest`
 -- Created by bin/latex-docker-setup-base if missing.  Defaults to full 5GB+ install.  Customize to your needs.
 
 Use
@@ -29,7 +29,7 @@ Use
 If you want to use in an existing latex project,
 ```bash
 cd my_latex_source
-curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zx --strip=1
+curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zx --strip=1 --exclude README.md --exclude LICENSE
 ```
 Alternatively, you could clone a fork of this repository for a new latex project
 ```bash
@@ -37,7 +37,7 @@ git clone my_latex_project.git
 cd my_latex_project
 ```
 
-After untarring/forking, you can buid the base docker with
+After untarring/forking, you can build the base docker with
 ```bash
 bin/latex-docker-setup-base
 ```
@@ -45,7 +45,7 @@ If you want less than the full (5+ GB) texlive, you can edit `dockers/latex/Dock
 
 The first time, and after any changes to the Dockerfile(s), you can re-create them and hooks for them with
 ```bash
-bin/setup-latex-docker
+bin/latex-docker-setup
 ```
 
 Once the dockers are created, you can adjust your path in the current shell to use the dockerized commands with
