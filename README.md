@@ -18,9 +18,9 @@ Versions
 --------
 Version is based on ubuntu xenial:
 
-- [`<dir>`/latex-base:latest](dockers/latex-base/Dockerfile)
+- [`<dir>/latex-base:latest`](dockers/latex-base/Dockerfile)
 -- CTAN TexLive Scheme-basic: Up-to-date, only basic packages, base for custom builds (500MB)
-- [<dir>/latex:latest](dockers/latex/Dockerfile)
+- [`<dir>/latex:latest`](dockers/latex/Dockerfile)
 -- Created by bin/latex-docker-setup-base if missing.  Defaults to full 5GB+ install.  Customize to your needs.
 
 Use
@@ -46,7 +46,9 @@ pdflatex main.tex
 
 More explicitly
 
+```bash
 bin/latex-docker <comand> <args..>
+```
 
 License
 -------
