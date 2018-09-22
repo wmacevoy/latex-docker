@@ -46,7 +46,7 @@ pdflatex main.tex
 
 # More explicitly
 
-bin/latex-docker <comand> <args..>
+bin/latex-docker <command> <args..>
 ```
 
 License
