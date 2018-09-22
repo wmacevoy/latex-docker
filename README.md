@@ -27,7 +27,10 @@ Use
 ------------
 
 ```bash
+
+# alternatively, you could clone a fork of this repository for a new latex project
 cd my_latex_source
+
 
 curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zx --strip=1
 
