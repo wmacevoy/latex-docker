@@ -8,16 +8,20 @@ Why should I use this container?
 -----
 - Preserves UID and GID of local user
 - Use container like local command: `pdflatex main.tex`
-- Core `texlive` to extends for your needs
-- Directory based dockers so your tex can be different in different projects
+- Core `texlive`, default to full or customize for your needs
+- Directory-based dockers, so your tex can be different in different projects
 - You maintain the fork - no reliance on me
+- You edit dockers/latex/Dockerfile, which this repo does not overwrite
 - Change of dependencies? Just change your docker and re-run bin/setup-latex-docker
 
 Versions
 --------
 Version is based on ubuntu xenial:
 
-- [<dir>/latex:ctanbasic](dockers/latex/Dockerfile) CTAN TexLive Scheme-basic: Up-to-date, only basic packages, base for custom builds (500MB)
+- [<dir>/latex-base:latest](dockers/latex-base/Dockerfile)
+-- CTAN TexLive Scheme-basic: Up-to-date, only basic packages, base for custom builds (500MB)
+- [<dir>/latex:latest](dockers/latex/Dockerfile)
+-- Created by bin/latex-docker-setup-base if missing.  Defaults to full 5GB+ install.  Customize to your needs.
 
 Use
 ------------
