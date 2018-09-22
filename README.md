@@ -52,7 +52,7 @@ Once the dockers are created, you can adjust your path in the current shell to u
 ```bash
 . bin/latex-docker-context
 ```
-After this you can run commands directly, for example:
+After this, you can run commands directly, for example:
 ```bash
 pdflatex main.tex
 latex-docker <command> <args>...
