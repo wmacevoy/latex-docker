@@ -26,31 +26,46 @@ Version is based on ubuntu xenial:
 Use
 ------------
 
+If you want to use in an existing latex project,
 ```bash
-
-# alternatively, you could clone a fork of this repository for a new latex project
 cd my_latex_source
-
-
 curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zx --strip=1
-
-bin/setup-latex-base-docker
-
-# edit the dockers/latex/Dockerfile to decide what you want (maybe just leave full install if unsure)
-
-# you can re-run this as many times as need be, after changing the Dockerfile for more or less stuff
-bin/setup-latex-docker
-
-# setup your context (path) for this project.  This way different projects can have different dockers...
-# do this once in each terminal you are using.  (or you can use the full path bin/pdflatex, etc.)
-. bin/latex-docker-context
-
-pdflatex main.tex
-
-# More explicitly
-
-bin/latex-docker <command> <args..>
 ```
+Alternatively, you could clone a fork of this repository for a new latex project
+```bash
+git clone my_latex_project.git
+cd my_latex_project
+```
+
+After untarring/forking, you can buid the base docker with
+```bash
+bin/latex-docker-setup-base
+```
+If you want less than the full texlive, you can edit `dockers/latex/Dockerfile` to decide what you want.
+
+The first time, and after any changes to the Dockerfile(s), you can re-create them and hooks for them with
+```bash
+bin/setup-latex-docker
+```
+
+Once the dockers are created, you can adjust your path in the current shell to use the dockerized commands with
+```bash
+. bin/latex-docker-context
+```
+After this you can run commands directly, for example:
+```bash
+pdflatex main.tex
+latex-docker <command> <args>...
+```
+or directly (even without the context path setting) as
+```bash
+bin/latex-docker <command> <args>...
+```
+
+Customize
+---------
+
+If you are missing files, you can add RUN commands in the `dockers/latex/Dockerfile` and re-run bin/latex-docker-setup to refresh the container.  If you append additions the updates should be fast.
 
 License
 -------
