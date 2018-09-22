@@ -59,6 +59,7 @@ latex-docker <command> <args>...
 ```
 or directly (even without the context path setting) as
 ```bash
+bin/pdflatex main.tex
 bin/latex-docker <command> <args>...
 ```
 

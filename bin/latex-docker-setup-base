@@ -28,7 +28,8 @@ fi
 (cd "$BASE_DIR/dockers" && docker build -t "$base_name/latex-base:latest" latex-base)
 
 if [ ! -f "$BASE_DIR/dockers/latex/Dockerfile " ] ; then
-cat >"$BASE_DIR/dockes/latex/Dockerfile" <<EOF
+    mkdir -p "$BASE_DIR/dockers/latex"
+    cat >"$BASE_DIR/dockes/latex/Dockerfile" <<EOF
 FROM "$base_name/latex-base:latest"
 # Comment out and replace with specific libraries for a smaller docker
 
