@@ -26,17 +26,7 @@ do
     chmod +x "$BASE_DIR/bin/$cmd"
 done
 
-cat >"$BASE_DIR/bin/latex-docker-context" <<EOF  
-#!/bin/bash
-if ! echo \$PATH | egrep "(^|:)$BASE_DIR/bin(:|\$)" >/dev/null
-then
-   export PATH="$BASE_DIR/bin:\$PATH"
-   hash -r
-else
-   echo "$BASE_DIR/bin is already in your path"
-fi
-EOF
-
-echo "Type ". bin/latex-docker-context" in the project base directory ($BASE_DIR) to set your PATH"
+echo "Type ". bin/latex-docker-context" in to add $BASE_DIR/bin to your PATH."
+echo "Type ". bin/latex-docker-uncontext" to remove it."
 
 
