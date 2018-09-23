@@ -19,11 +19,16 @@ base_name="$(echo $BASE_NAME | tr ' [:upper:]' '_[:lower:]')"
 CMDS="$(docker run --rm -a stdin -a stdout "$base_name/latex:latest" /bin/sh -c 'ls `echo $PATH  | cut -d: -f1`')"
 
 cd "$BASE_DIR/bin"
+if [ ! -f .gitignore ] ; then touch .gitignore ; fi
 for cmd in $CMDS
 do
     /bin/rm -rf "$cmd"
     ln -s "latex-docker-command" "$cmd"
     chmod +x "$BASE_DIR/bin/$cmd"
+    if ! egrep -q "^$cmd$" .gitignore
+    then
+        echo "$cmd" >> .gitignore
+    fi
 done
 
 echo "Type ". bin/latex-docker-context" in to add $BASE_DIR/bin to your PATH."
