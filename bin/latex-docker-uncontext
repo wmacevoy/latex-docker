@@ -1,0 +1,18 @@
+# find directory of this sourced context
+
+pushd $(dirname "${BASH_SOURCE[0]}") >/dev/null
+latex_docker_bin="$PWD"
+popd >/dev/null
+
+# remove directory from path
+PATH=":$PATH:"
+while [ "${PATH/:$latex_docker_bin:/:}" != "$PATH" ] ; do PATH="${PATH/:$latex_docker_bin:/:}"; done
+
+# remove extra colons
+PATH="${PATH%:}"
+PATH="${PATH#:}"
+
+# invalidate cache
+hash -r
+
+
