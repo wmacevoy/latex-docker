@@ -66,7 +66,13 @@ bin/latex-docker <command> <args>...
 Customize
 ---------
 
-If you are missing files, you can add RUN commands in the `dockers/latex/Dockerfile` and re-run bin/latex-docker-setup to refresh the container.  If you append additions the updates should be fast.
+If you are missing files, you can add RUN commands in the `dockers/latex/Dockerfile` and re-run bin/latex-docker-setup to refresh the container.  If you append additions the updates should be fast.  It is often handy to run
+
+```bash
+tlmgr search --global --file <thing>
+```
+
+to locate which package you want to install that is missing.
 
 License
 -------
