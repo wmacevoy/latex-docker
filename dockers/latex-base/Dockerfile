@@ -1,5 +1,5 @@
 # fork of https://github.com/blang/latex-docker / Benedikt Lang <mail@blang.io> 
-FROM ubuntu:xenial
+FROM debian:jessie
 MAINTAINER Warren MacEvoy <wmacevoy@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 
