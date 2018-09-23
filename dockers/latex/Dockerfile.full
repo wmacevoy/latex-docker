@@ -1,0 +1,3 @@
+FROM "luck/latex-base:latest"
+
+RUN tlmgr install scheme-full
