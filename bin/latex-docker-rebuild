@@ -1,0 +1,20 @@
+#!/bin/bash
+
+get_script_dir () {
+    pushd $(dirname "${BASH_SOURCE[0]}") >/dev/null
+    pwd
+    popd >/dev/null
+}
+
+THIS_DIR="$(get_script_dir)"
+
+cd $THIS_DIR
+cd ..
+
+curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zxv --strip=1 '*/bin' '*/dockers'
+bin/latex-docker-setup
+if git rev-parse --is-inside-work-tree > /dev/null 2>&1
+then
+    git add bin/.gitignore bin/latex-docker bin/latex-docker-command bin/latex-docker-rebuild bin/latex-docker-setup-base bin/latex-docker-setup dockers/latex-base/Dockerfile dockers/latex/Dockerfile dockers/latex/Dockerfile.*[a-z0-9]
+    git commit -m 'update latex-docker'
+fi

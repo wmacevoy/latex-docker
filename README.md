@@ -32,6 +32,7 @@ custom latex docker in `dockers/latex/Dockerfile`.  This does over-write the fol
     bin/latex-docker
     bin/latex-docker-command
     bin/latex-docker-context
+    bin/latex-docker-rebuild
     bin/latex-docker-setup
     bin/latex-docker-setup-base
     dockers/latex-base/Dockerfile
@@ -100,9 +101,13 @@ Helpful hints:
 ### Step 7 - version control
 If you are using git,
 ```bash
-git add bin/latex-docker bin/latex-docker-command bin/latex-docker-setup-base bin/latex-docker-setup dockers/latex-base/Dockerfile dockers/latex/Dockerfile dockers/latex/Dockerfile.*[a-z0-9]
+git add bin/.gitignore bin/latex-docker bin/latex-docker-command bin/latex-docker-setup-base bin/latex-docker-setup dockers/latex-base/Dockerfile dockers/latex/Dockerfile dockers/latex/Dockerfile.*[a-z0-9]
 git commit -m 'update latex-docker'
 git push
+```
+Alternatively, if you want the latest updates from this master and rebuild everything and commit it,
+```bash
+bin/latex-docker-rebuild
 ```
 
 ## Use
