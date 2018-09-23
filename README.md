@@ -16,7 +16,7 @@ Why should I use this container?
 
 Versions
 --------
-Version is based on ubuntu xenial (16.04):
+Version is based on debian jessie:
 
 - [`<dir>/latex-base:latest`](dockers/latex-base/Dockerfile)
 -- CTAN TexLive Scheme-basic: Up-to-date, only basic packages, base for custom builds (500MB)
@@ -31,6 +31,9 @@ If you want to use in an existing latex project,
 cd my_latex_source
 curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zx --strip=1 --exclude README.md --exclude LICENSE
 ```
+You should be able to do this anytime you want to encorporate an update without harming any of your files, including your
+custom latex docker in `dockers/latex/Dockerfile`.
+
 Alternatively, you could clone a fork of this repository for a new latex project
 ```bash
 git clone my_latex_project.git
