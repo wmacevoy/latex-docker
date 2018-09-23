@@ -105,14 +105,33 @@ git push
 
 If your project is using this framework, you and your collaborators should able to
 
-- Install docker
-- Clone your project
+- install docker
+- clone your project 
 - run `bin/latex-docker-setup` in a bash shell (docker cli shell in windows, just a bash shell for everyone else)
+- find something to do for a few hours if you decided on scheme-full
 
 After this, any time they want to work on the project,
 
-- run `bin/latex-docker-context` to setup their path.
+- run (**NOTICE DOT**) `. bin/latex-docker-context` to setup their path in the terminal they are using.
 - use the texlive commands, `pdflatex paper.tex` etc.
+
+## FAQ
+
+Q. I need to install X.  But after I install X it still seems to be missing.
+
+A. After building the container, its content is fixed.  Append a  `RUN` command in `dockers/latex/Dockerfile` and re-run `bin/latex-docker-setup`.  Use tlmgr to query, but installs happen in the Dockefile.  (This is a good thing, your Dockerfile should have everything to build your project with so it is maintainable).
+
+Q. There are errors about missing fonts / packages.
+
+A. Search for the error on the internet along with "texlive" and perhaps "debian".  The hints that show up try adding to your Dockerfile as a `RUN` command.  If they fail you can just remove them.  Update the commands with `bin/latex-docker-setup`
+
+Q. I created/fixed a Dockerfile for X
+
+A. Fork this, create "dockers/latex/Dockerfile.X" with some helpful comments and make a pull request.
+
+## Thanks
+
+Thanks to Benedikt Lang <github at benediktlang.de> [https://github.com/blang/latex-docker](https://github.com/blang/latex-docker) for the foundations of this project.
 
 ## License
 
