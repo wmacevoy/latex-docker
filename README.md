@@ -1,83 +1,119 @@
-Latex docker container 
-======================
+# Latex docker container
 
-This container helps compiling latex sources without the need to install all latex packages on your system, and keeps those containers
-on a per-project basis, so old and new package dependencies do not conflict.
+## What
 
-Why should I use this container?
------
-- Preserves UID and GID of local user
-- Use container like local command: `pdflatex main.tex`
-- Core `texlive`, default to full or customize for your needs
-- Directory-based dockers, so your tex can be different in different projects
-- You maintain the fork - no reliance on me
-- You edit dockers/latex/Dockerfile, which this repo does not overwrite
-- Change of dependencies? Just change your docker and re-run bin/setup-latex-docker
+TexLive docker management
 
-Versions
---------
-Version is based on debian jessie:
+## Why
 
-- [`<dir>/latex-base:latest`](dockers/latex-base/Dockerfile)
--- CTAN TexLive Scheme-basic: Up-to-date, only basic packages, base for custom builds (500MB)
-- `<dir>/latex:latest`
--- Created by bin/latex-docker-setup-base if missing.  Defaults to full 5GB+ install.  Customize to your needs.
+- Simple. Use dockerized commands just like normal: `pdflatex main.tex`
+- Versioned.  Each project uses their own packages.  No conflicts
+- Maintainable. You can add updates to the base without losing your changes
+- Shareable.  Your project folder contains how to build your documents.
+- Secure.  You decide what is in the Docker - no reliance on me
 
-Use
-------------
+## Use
 
-If you want to use in an existing latex project,
+### Step 1/new - For new projects
+
+Fork this repository, rename it to what you want, and clone it locally.
+
+### Step 1/used - For existing projects
+
+If you want to use in an existing latex project, or update an existing project with the new base (this does not effect your customizations), in the root of your latex project, copy the following:
 ```bash
-cd my_latex_source
-curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zx --strip=1 --exclude README.md --exclude LICENSE
+curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zxv --strip=1 --exclude README.md --exclude LICENSE
 ```
 You should be able to do this anytime you want to encorporate an update without harming any of your files, including your
-custom latex docker in `dockers/latex/Dockerfile`.
+custom latex docker in `dockers/latex/Dockerfile`.  This does over-write the following files:
 
-Alternatively, you could clone a fork of this repository for a new latex project
+       `bin/latex-docker`
+       `bin/latex-docker-command`
+       `bin/latex-docker-context`
+       `bin/latex-docker-setup`
+       `bin/latex-docker-setup-base`
+       `dockers/latex-base/Dockerfile`
+       `dockers/latex/Dockerfile.*` (example templates)
+
+### Step 2 - context
+
+The commands in the bin folder can be executed expicitly from any working directory.  However the project bin is added to the front of your PATH with [**NOTICE DOT**]
 ```bash
-git clone my_latex_project.git
-cd my_latex_project
+. bin/latex-docker-context
 ```
+in a terminal.
 
-After untarring/forking, you can build the base docker with
+Sourcing uncontext,
+```bash
+. bin/latex-docker-uncontext
+```
+removes it.
+
+### Step 3 - setup base
+
+After untarring/forking, build the base docker with
 ```bash
 bin/latex-docker-setup-base
 ```
-If you want less than the full (5+ GB) texlive, you can edit `dockers/latex/Dockerfile` to decide what you want.
+If you don't already have one, this creates a default scheme-full (5+GB, 2+ hours to build) latex Dockerfile in `dockers/latex/Dockerfile`.  It does not build it in this step (you can customize it in the next step).
 
-The first time, and after any changes to the Dockerfile(s), you can re-create them and hooks for them with
+This means if you want to just get a cup of coffee and not think about it, you can skip the customize step and you will have a full texlive to work from.
+
+### Step 4 - customize (optional, but very good idea)
+
+Edit the `dockers/latex/Dockerfile` file to decide what you want.  There are some Dockerfile.* templates to start from.  
+
+**DO NOT** change the first FROM line - this was written specifically by setup-base so your dockers are project specific - they are named according to the folder of the project they are in.
+
+It can be tempting to just leave the `scheme-full` version.  However, it will be painful to get the gigantic (5+GB, 2+ hour) full texlive distribution which all your collaborators will have to repeat.  Spending a little time on this will pay off later for a lightweight tex that is easy to share.  I recommend starting from the "miniumum" profile.  You can easily repeat your customization until you have everything you need.
+
+### Step 4 - setup
+
+You can repeat this step as often as you like (after any updates to your project dockers).  
+
 ```bash
 bin/latex-docker-setup
 ```
 
-Once the dockers are created, you can adjust your path in the current shell to use the dockerized commands with
-```bash
-. bin/latex-docker-context
-```
-After this, you can run commands directly, for example:
-```bash
-pdflatex main.tex
-latex-docker <command> <args>...
-```
-or directly (even without the context path setting) as
-```bash
-bin/pdflatex main.tex
-bin/latex-docker <command> <args>...
-```
-
-Customize
----------
-
-If you are missing files, you can add RUN commands in the `dockers/latex/Dockerfile` and re-run bin/latex-docker-setup to refresh the container.  If you append additions the updates should be fast.  It is often handy to run
+This rebuilds the container and creates a number of symbolic links in your `bin` folder to all the texlive commands in your latex container.  You can run them directly, like
 
 ```bash
-tlmgr search --global --file <thing>
+bin/pdflatex paper.tex
 ```
 
-to locate which package you want to install that is missing.
+Alternatively,
 
-License
--------
+```bash
+bin/latex-docker <command> <args...>
+```
+
+Helpful hints:
+
+- Instead of editing a long `RUN tlmgr install <packages...>`, append a new `RUN` command.  The docker build caches `RUN` steps so you can add packages quickly as you find what your project needs.
+- Running `bin/tlmgr search --global --file <thing>` will help you find packages that provide `<thing>` so you can append `RUN tlmgr install <package>` to your docker.
+- Once it all works you can merge it into one RUN line which simplifies the cache for docker.  Sort the packages alphabetically so it is easy for others to see if they are already in the list.
+
+### Step 7 - version control
+If you are using git,
+```bash
+git add bin/latex-docker bin/latex-docker-command bin/latex-docker-setup-base bin/latex-docker-setup dockers/latex-base/Dockerfile dockers/latex/Dockerfile dockers/latex/Dockerfile.*[a-z0-9]
+git commit -m 'update latex-docker'
+git push
+```
+
+## Use
+
+If your project is using this framework, you and your collaborators should able to
+
+- Install docker
+- Clone your project
+- run `bin/latex-docker-setup` in a bash shell (docker cli shell in windows, just a bash shell for everyone else)
+
+After this, any time they want to work on the project,
+
+- run `bin/latex-docker-context` to setup their path.
+- use the texlive commands, `pdflatex paper.tex` etc.
+
+## License
 
 See [LICENSE](LICENSE) file.
