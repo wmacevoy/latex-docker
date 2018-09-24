@@ -70,7 +70,7 @@ Edit the `dockers/latex/Dockerfile` file to decide what you want.  You don't hav
 
 It can be tempting to just leave the `scheme-full` version.  However, it will be painful to get the gigantic (5+GB, 2+ hour) full texlive distribution which all your collaborators will have to repeat.  Spending a little time on this will pay off later for a lightweight tex that is easy to share.  I recommend starting from the "miniumum" profile.  You can easily repeat your customization until you have everything you need.
 
-### Step 4 - setup
+### Step 5 - setup
 
 You can repeat this step as often as you like (after any updates to your project dockers).  
 
@@ -92,6 +92,10 @@ Alternatively,
 bin/latex-docker <command...>
 ```
 
+### Step 6 - customize (again)
+
+If you started from the minimum, you will have customize/setup several times before everything works.  This is a good thing from the point of keeping future installs fast, small, portable and maintainable.  Your future self and collaborators will thank you (well maybe at least not curse you compared to `scheme-full`)
+
 Helpful hints:
 
 - Instead of editing a long `RUN tlmgr install <packages...>`, append a new `RUN` command.  The docker build caches `RUN` steps so you can add packages quickly as you find what your project needs.
@@ -99,11 +103,11 @@ Helpful hints:
 - Once it all works, you can merge it into one RUN line which simplifies the cache for docker.  Sort the packages alphabetically so it is easy for you to see if a packages is already in the install list.
 
 ### Step 7 - version control
-If you are using git,
+
+If you are using git, copy the following commands:
 ```bash
 git add bin/.gitignore bin/latex-docker bin/latex-docker-command bin/latex-docker-setup-base bin/latex-docker-setup dockers/latex-base/Dockerfile dockers/latex/Dockerfile dockers/latex/Dockerfile.*[a-z0-9]
 git commit -m 'update latex-docker'
-git push
 ```
 Alternatively, if you want the latest updates from this master and rebuild everything and commit it,
 ```bash
