@@ -24,3 +24,13 @@ ENV HOME /home
 RUN tlmgr install latexmk
 
 VOLUME ["/data","/home"]
+
+# needed for basic build rules
+RUN apt-get update
+RUN apt-get install -y python-software-properties
+RUN apt-get install -y apt-file
+RUN apt-file update
+RUN apt-get install -y software-properties-common
+
+# needed for asymptote to run
+RUN apt-get install -y freeglut3 ghostscript libglu1 libosmesa6 
