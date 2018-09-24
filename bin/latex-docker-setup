@@ -31,7 +31,7 @@ do
     fi
 done
 
-echo "Type ". bin/latex-docker-context" in to add $BASE_DIR/bin to your PATH."
-echo "Type ". bin/latex-docker-uncontext" to remove it."
+echo 'Type ". bin/latex-docker-context" to add $BASE_DIR/bin to your PATH.'
+echo 'Type ". bin/latex-docker-uncontext" to remove it.'
 
 
