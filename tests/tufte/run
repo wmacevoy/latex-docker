@@ -1,3 +1,9 @@
+if [ ! -f ../../bin/latex-docker ]
+then
+  echo "must be run from test/tufte folder"
+  exit 1
+fi
+
 /bin/rm -rf test-tufte
 mkdir -p test-tufte
 
@@ -20,21 +26,21 @@ sed -i "" -e '/# tufte/{n;n;s/RUN echo skip tlmgr/RUN tlmgr/;}' dockers/latex/Do
 bin/latex-docker-setup
 
 /bin/rm -rf graphics/helix.asy
-bin/asy -f pdf -o graphics/helix.pdf graphics/helix.asy
+bin/asy -f pdf -o graphics/helix.pdf graphics/helix.asy || exit 1
 
 /bin/rm -rf sample-handout.pdf
 
-bin/pdflatex sample-handout
-bin/bibtex   sample-handout
-bin/pdflatex sample-handout
-bin/pdflatex sample-handout
+bin/pdflatex sample-handout || exit 1
+bin/bibtex   sample-handout || exit 1
+bin/pdflatex sample-handout || exit 1
+bin/pdflatex sample-handout || exit 1
 
 /bin/rm -rf sample-book.pdf
 
-bin/pdflatex sample-book
-bin/bibtex sample-book
-bin/xindy --language english sample-book.idx
-bin/makeindex sample-book.idx
-bin/pdflatex sample-book
-bin/pdflatex sample-book
-bin/pdflatex sample-book
+bin/pdflatex sample-book || exit 1
+bin/bibtex sample-book || exit 1
+bin/xindy --language english sample-book.idx || exit 1
+bin/makeindex sample-book.idx || exit 1
+bin/pdflatex sample-book || exit 1
+bin/pdflatex sample-book || exit 1
+bin/pdflatex sample-book || exit 1
