@@ -64,7 +64,7 @@ This means if you want to just get a cup of coffee and not think about it, you c
 
 ### Step 4 - customize (optional, but very good idea)
 
-Edit the `dockers/latex/Dockerfile` file to decide what you want.  There are some Dockerfile.* templates to start from.  
+Edit the `dockers/latex/Dockerfile` file to decide what you want.  You don't have to get it right the first time.
 
 **DO NOT** change the first FROM line - this was written specifically by setup-base so your dockers are project specific - they are named according to the folder of the project they are in.
 
