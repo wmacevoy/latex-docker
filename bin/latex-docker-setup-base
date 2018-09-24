@@ -88,6 +88,7 @@ RUN echo skip tlmgr install \\
     microtype \\
     ms \\
     paralist \\
+    palatino \\
     placeins \\
     relenc \\
     setspace \\
