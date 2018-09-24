@@ -7,4 +7,4 @@ popd >/dev/null
 PARENT_NAME="$(basename "$PARENT_DIR")"
 parent_name="$(echo $PARENT_NAME | tr ' [:upper:]' '_[:lower:]')"
 
-docker run --rm -i --user="$(id -u):$(id -g)" -a stdin -a stdout -v "$PWD":/data -w /data "$parent_name/latex:latest" "$@"
+docker run --rm -i --user="$(id -u):$(id -g)" -a stdin -a stdout -v "$PWD":/data/src "$parent_name/latex:latest" "$@"
