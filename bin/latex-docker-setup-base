@@ -39,7 +39,7 @@ FROM "$base_name/latex-base:latest"
 # 3. Once you have the packages, combine them into one tlmgr install in sorted order to help docker
 #    cache them once and make it easier on your collaborators...
 #
-# 4. You can nullify multiline RUN lines by replacing inserting a true# at the begining:
+# 4. You can nullify multiline RUN lines by replacing inserting a true # at the begining:
 #
 #    # enabled
 #    RUN tlmgr install \\
@@ -48,7 +48,7 @@ FROM "$base_name/latex-base:latest"
 #        #end
 #
 #    # disabled
-#    RUN true# tlmgr install \\
+#    RUN true # tlmgr install \\
 #        <package1> \\
 #        <package2> \\
 #        #end
@@ -66,15 +66,15 @@ RUN tlmgr install \\
     #end
 
 #
-# min (remove true# below and comment out scheme-full above to use)
+# min (remove true # below and comment out scheme-full above to use)
 #
-RUN true# tlmgr install \\
+RUN true # tlmgr install \\
     collection-fontsrecommended \\
     #end
 #
-# tufte (remove true# below and comment out scheme-full above to use)
+# tufte (remove true # below and comment out scheme-full above to use)
 #
-RUN true# tlmgr install \\
+RUN true # tlmgr install \\
     asymptote \\
     booktabs \\
     ccicons \\
