@@ -72,28 +72,46 @@ RUN echo skip tlmgr install \\
 #
 RUN echo skip tlmgr install \\
     asymptote \\
+    beramono \\
+    bibentry \\
     booktabs \\
     ccicons \\
+    chngpage \\
     collection-fontsrecommended \\
+    fancyhdr \\
     fancyvrb \\
+    fontenc \\
     fpl \\
     genmisc \\
+    geometry \\
     hardwrap \\
+    helvet \\
+    hyperref \\
     l3kernel \\
     l3packages \\
+    letterspace \\
     lipsum \\
     listings \\
     mathpazo \\
     microtype \\
     ms \\
+    natbib \\
+    optparams \\
+    paralist \\
+    placeins \\
+    ragged2e \\
     relenc \\
     setspace \\
     siunitx \\
+    soul \\
     textcase \\
+    textcomp \\
     titlesec \\
+    titletoc \\
     tufte-latex \\
     units \\
     xcolor \\
+    xifthen \\
     xkeyval
 EOF
 fi
