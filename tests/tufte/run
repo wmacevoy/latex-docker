@@ -1,0 +1,40 @@
+/bin/rm -rf test-tufte
+mkdir -p test-tufte
+
+cd test-tufte
+curl -L https://github.com/Tufte-LaTeX/tufte-latex/tarball/master | tar zxv --strip=1
+
+/bin/rm -rf bin
+mkdir -p bin
+cp ../../../bin/latex-docker* bin
+
+/bin/rm -rf dockers
+mkdir -p dockers/latex-base
+cp ../../../dockers/latex-base/* dockers/latex-base
+
+/bin/rm -rf dockers/latex
+bin/latex-docker-setup-base
+sed -i "" -e 's/^RUN tlmgr/RUN echo skip tlmgr/' dockers/latex/Dockerfile
+sed -i "" -e '/# tufte/{n;n;s/RUN echo skip tlmgr/RUN tlmgr/;}' dockers/latex/Dockerfile
+
+bin/latex-docker-setup
+
+/bin/rm -rf graphics/helix.asy
+bin/asy -f pdf -o graphics/helix.pdf graphics/helix.asy
+
+/bin/rm -rf sample-handout.pdf
+
+bin/pdflatex sample-handout
+bin/bibtex   sample-handout
+bin/pdflatex sample-handout
+bin/pdflatex sample-handout
+
+/bin/rm -rf sample-book.pdf
+
+bin/pdflatex sample-book
+bin/bibtex sample-book
+bin/xindy --language english sample-book.idx
+bin/makeindex sample-book.idx
+bin/pdflatex sample-book
+bin/pdflatex sample-book
+bin/pdflatex sample-book
