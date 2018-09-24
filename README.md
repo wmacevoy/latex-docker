@@ -40,7 +40,7 @@ custom latex docker in `dockers/latex/Dockerfile`.  This does over-write the fol
 
 ### Step 2 - context
 
-The commands in the bin folder can be executed expicitly from any working directory.  However the project bin is added to the front of your PATH with [**NOTICE DOT**]
+The commands in the bin folder can be executed explicitly from any working directory.  However the project bin is added to the front of your PATH with [**NOTICE DOT**]
 ```bash
 . bin/latex-docker-context
 ```
@@ -68,7 +68,7 @@ Edit the `dockers/latex/Dockerfile` file to decide what you want.  You don't hav
 
 **DO NOT** change the first FROM line - this was written specifically by setup-base so your dockers are project specific - they are named according to the folder of the project they are in.
 
-It can be tempting to just leave the `scheme-full` version.  However, it will be painful to get the gigantic (5+GB, 2+ hour) full texlive distribution which all your collaborators will have to repeat.  Spending a little time on this will pay off later for a lightweight tex that is easy to share.  I recommend starting from the "miniumum" profile.  You can easily repeat your customization until you have everything you need.
+It can be tempting to just leave the `scheme-full` version.  However, it will be painful to get the gigantic (5+GB, 2+ hour) full texlive distribution which all your collaborators will have to repeat.  Spending a little time on this will pay off later for a lightweight tex that is easy to share.  I recommend starting from the "minimum" profile.  You can easily repeat your customization until you have everything you need.
 
 ### Step 5 - setup
 
@@ -100,7 +100,7 @@ Helpful hints:
 
 - Instead of editing a long `RUN tlmgr install <packages...>`, append a new `RUN` command.  The docker build caches `RUN` steps so you can add packages quickly as you find what your project needs.
 - Running `bin/tlmgr search --global --file <thing>` will help you find packages that provide `<thing>` so you can append `RUN tlmgr install <package>` to your docker.
-- Once it all works, you can merge it into one RUN line which simplifies the cache for docker.  Sort the packages alphabetically so it is easy for you to see if a packages is already in the install list.
+- Once it all works, you can merge it into one RUN line which simplifies the cache for docker.  Sort the packages alphabetically so it is easy for you to see if a package is already in the install list.
 
 ### Step 7 - version control
 
