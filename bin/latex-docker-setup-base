@@ -25,8 +25,54 @@ if [ ! -f "$BASE_DIR/dockers/latex/Dockerfile" ] ; then
     mkdir -p "$BASE_DIR/dockers/latex"
     cat >"$BASE_DIR/dockers/latex/Dockerfile" <<EOF
 FROM "$base_name/latex-base:latest"
-# Comment out and replace with specific libraries for a smaller docker
+#
+# I know "scheme-full" is tempting, but three hours later you may have wished you picked out the packages...
+#
+# 1. Try using
+#
+#  tlmgr search --global --file <missing thing>
+#
+# to figure out what you need to install.
+#
+#
+# 2. append extra RUN lines so docker can cache your build steps instead of re-running all of them.
+#
+# 3. Once you have the packages, combine them into one tlmgr install in sorted order to help docker
+#    cache them once and make it easier on your collaborators...
+#
+#
 
+#
+# scheme-full (5+GB, 2+hours) - comment out to ignore
+#
 RUN tlmgr install scheme-full
+
+# tufte (remove true# to use)
+RUN true# tlmgr install \\
+    asymptote \\
+    booktabs \\
+    ccicons \\
+    collection-fontsrecommended \\
+    fancyvrb \\
+    fpl \\
+    genmisc \\
+    hardwrap \\
+    l3kernel \\
+    l3packages \\
+    lipsum \\
+    listings \\
+    mathpazo \\
+    microtype \\
+    ms \\
+    relenc \\
+    setspace \\
+    siunitx \\
+    textcase \\
+    titlesec \\
+    tufte-latex \\
+    units \\
+    xcolor \\
+    xkeyval \\
+    #end
 EOF
 fi
