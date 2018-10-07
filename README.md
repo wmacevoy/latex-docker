@@ -44,7 +44,7 @@ The commands in the bin folder can be executed explicitly from any working direc
 ```bash
 . bin/latex-docker-context
 ```
-in a terminal.
+in a terminal.  This command removes any occurances of the path first, so you can source context repeatedly.
 
 Sourcing uncontext,
 ```bash
