@@ -1,5 +1,5 @@
 # fork of https://github.com/blang/latex-docker / Benedikt Lang <mail@blang.io> 
-FROM debian:jessie
+FROM debian:stretch
 MAINTAINER Warren MacEvoy <wmacevoy@gmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 
@@ -22,7 +22,7 @@ RUN wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz; \
     rm -r /install-tl-unx; \
 	rm install-tl-unx.tar.gz
 
-ENV TEXLIVE_DIR="/usr/local/texlive/2018"
+ENV TEXLIVE_DIR="/usr/local/texlive/2019"
 ENV TEXLIVE_BIN="${TEXLIVE_DIR}/bin/x86_64-linux"
 ENV PATH="${TEXLIVE_BIN}:${PATH}"
 
