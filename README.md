@@ -26,6 +26,12 @@ In the root of your latex project, copy the following:
 ```bash
 curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zxv --strip=1 '*/bin' '*/dockers'
 ```
+If this reports an error about `Use --wildcards to enable pattern matching`, then try
+```bash
+curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zxv --strip=1 --wildcards '*/bin' '*/dockers'
+```
+instead.
+
 You should be able to do this anytime you want to encorporate an update without harming any of your files, including your
 custom latex docker in `dockers/latex/Dockerfile`.  This does over-write the following files:
 
