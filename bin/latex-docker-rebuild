@@ -6,12 +6,21 @@ get_script_dir () {
     popd >/dev/null
 }
 
+wctar () {
+    if tar --wildcards -xf /dev/null 2>&1 | grep -q "not supported"
+    then
+	tar "$@"
+    else
+	tar --wildcards "$@"
+    fi
+}
+
 THIS_DIR="$(get_script_dir)"
 
 cd $THIS_DIR
 cd ..
 
-curl -L https://github.com/wmacevoy/latex-docker/tarball/master | tar zxv --strip=1 '*/bin' '*/dockers'
+curl -L https://github.com/wmacevoy/latex-docker/tarball/master | wctar -zxv --strip=1 '*/bin' '*/dockers'
 bin/latex-docker-setup
 if git rev-parse --is-inside-work-tree > /dev/null 2>&1
 then
