@@ -78,7 +78,6 @@ RUN echo skip tlmgr install \\
     collection-fontsrecommended \\
     fancyvrb \\
     fpl \\
-    genmisc \\
     hardwrap \\
     l3kernel \\
     l3packages \\
