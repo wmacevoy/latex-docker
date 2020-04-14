@@ -4,23 +4,12 @@ then
   exit 1
 fi
 
-BRANCH=master
-while [ $# -gt 0 ]
-do
-case "$1"
-in
-  -b|--branch) BRANCH="$2"; shift;;
-  -h|--help)   echo "usage: $0 [-b|--branch <master>]";;
-  *) exit 1;;
-esac
-shift
-done
 
 /bin/rm -rf test-tufte
 mkdir -p test-tufte
 
 cd test-tufte
-curl -L https://github.com/Tufte-LaTeX/tufte-latex/tarball/"$BRANCH" | tar zxv --strip=1
+curl -L https://github.com/Tufte-LaTeX/tufte-latex/tarball/master | tar zxv --strip=1
 
 /bin/rm -rf bin
 mkdir -p bin

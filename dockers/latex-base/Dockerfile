@@ -15,14 +15,23 @@ RUN apt-get update -q \
 
 # Install TexLive with scheme-basic
 RUN wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz; \
-	mkdir /install-tl-unx; \
-	tar -xvf install-tl-unx.tar.gz -C /install-tl-unx --strip-components=1; \
+    mkdir /install-tl-unx; \
+    tar -xvf install-tl-unx.tar.gz -C /install-tl-unx --strip-components=1; \
     echo "selected_scheme scheme-basic" >> /install-tl-unx/texlive.profile; \
-	/install-tl-unx/install-tl -profile /install-tl-unx/texlive.profile; \
+    /install-tl-unx/install-tl -profile /install-tl-unx/texlive.profile; \
     rm -r /install-tl-unx; \
-	rm install-tl-unx.tar.gz
+    rm install-tl-unx.tar.gz
 
-ENV TEXLIVE_DIR="/usr/local/texlive/2019"
+#RUN wget http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/install-tl-unx.tar.gz; \
+#	mkdir /install-tl-unx; \
+#	tar -xvf install-tl-unx.tar.gz -C /install-tl-unx --strip-components=1; \
+#    echo "selected_scheme scheme-basic" >> /install-tl-unx/texlive.profile; \
+#	/install-tl-unx/install-tl -profile /install-tl-unx/texlive.profile; \
+#    rm -r /install-tl-unx; \
+#	rm install-tl-unx.tar.gz
+
+RUN ls -l /usr/local/texlive
+ENV TEXLIVE_DIR="/usr/local/texlive/2020"
 ENV TEXLIVE_BIN="${TEXLIVE_DIR}/bin/x86_64-linux"
 ENV PATH="${TEXLIVE_BIN}:${PATH}"
 
