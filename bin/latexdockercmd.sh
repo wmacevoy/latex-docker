@@ -9,4 +9,4 @@ parent_name="$(echo $PARENT_NAME | tr ' [:upper:]' '_[:lower:]')"
 
 IMAGE="$parent_name/latex:latest"
 
-exec docker run --rm -i --user="$(id -u):$(id -g)" --net=none -v "$PWD":/data "$IMAGE" "$@"
+exec ${CONTAINER_ENGINE:-podman} run --rm -i --user="$(id -u):$(id -g)" --net=none -v "$PWD":/data "$IMAGE" "$@"
