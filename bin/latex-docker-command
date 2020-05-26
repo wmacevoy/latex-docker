@@ -1,7 +1,7 @@
 #!/bin/bash
 this="${BASH_SOURCE[0]}"
 cmd="$(basename "$this")"
-pushd $(dirname "$this") >/dev/null
+pushd "$(dirname "$this")" >/dev/null
 this_dir="$PWD"
 popd >/dev/null
 "$this_dir/latex-docker" "$cmd" "$@"

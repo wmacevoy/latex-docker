@@ -1,6 +1,8 @@
+# shellcheck shell=bash
+
 # find directory of this sourced context
 
-pushd $(dirname "${BASH_SOURCE[0]}") >/dev/null
+pushd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null
 latex_docker_bin="$PWD"
 popd >/dev/null
 
@@ -14,4 +16,4 @@ PATH="$latex_docker_bin${PATH%:}"
 # invalidate cache
 hash -r
 
-
+# vim: ft=sh:

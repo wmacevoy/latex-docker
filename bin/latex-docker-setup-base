@@ -1,7 +1,7 @@
 #!/bin/bash
 
 get_script_dir () {
-    pushd $(dirname "${BASH_SOURCE[0]}") >/dev/null
+    pushd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null
     pwd
     popd >/dev/null
 }
@@ -9,22 +9,23 @@ get_script_dir () {
 THIS_DIR="$(get_script_dir)"
 BASE_DIR="$(dirname "$THIS_DIR")"
 BASE_NAME="$(basename "$BASE_DIR")"
-base_name="$(echo $BASE_NAME | tr ' [:upper:]' '_[:lower:]')"
+base_name="$(echo "$BASE_NAME" | tr ' [:upper:]' '_[:lower:]')"
 
-if ! which docker > /dev/null
+if ! which "${CONTAINER_ENGINE:-docker}" > /dev/null
 then
-    echo "you must install docker..."
+    # shellcheck disable=2016
+    echo 'you must install docker (or podman and set $CONTAINER_ENGINE)...'
     exit 1
 fi
 
-(cd "$BASE_DIR/dockers" && docker build -t "$base_name/latex-base:latest" latex-base)
+(cd "$BASE_DIR/dockers" && ${CONTAINER_ENGINE:-docker} build -t "$base_name/latex-base:latest" latex-base)
 
 if [ ! -f "$BASE_DIR/dockers/latex/Dockerfile" ] ; then
     echo "Creating a default (full texlive install) Dockerfile in $BASE_DIR/dockers/latex"
     echo "Edit this file before running $BASE_DIR/bin/latex-docker-setup if you want a custom setup."
     mkdir -p "$BASE_DIR/dockers/latex"
     cat >"$BASE_DIR/dockers/latex/Dockerfile" <<EOF
-FROM "$base_name/latex-base:latest"
+FROM $base_name/latex-base:latest
 #
 # I know "scheme-full" is tempting, but three hours later you may have wished you picked out the packages...
 #
