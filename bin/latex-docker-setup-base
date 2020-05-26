@@ -25,7 +25,7 @@ if [ ! -f "$BASE_DIR/dockers/latex/Dockerfile" ] ; then
     echo "Edit this file before running $BASE_DIR/bin/latex-docker-setup if you want a custom setup."
     mkdir -p "$BASE_DIR/dockers/latex"
     cat >"$BASE_DIR/dockers/latex/Dockerfile" <<EOF
-FROM "$base_name/latex-base:latest"
+FROM $base_name/latex-base:latest
 #
 # I know "scheme-full" is tempting, but three hours later you may have wished you picked out the packages...
 #
