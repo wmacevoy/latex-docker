@@ -10,4 +10,4 @@ parent_name="$(echo "$PARENT_NAME" | tr ' [:upper:]' '_[:lower:]')"
 IMAGE="$parent_name/latex:latest"
 NAME="$(echo "$IMAGE:daemon" | tr '/:' '--')"
 
-exec "${CONTAINER_ENGINE:-podman}" run -d --rm --name "$NAME" -i --user="$(id -u):$(id -g)" --net=none -t -v "$PWD:/data" "$IMAGE" /bin/sh -c "sleep infinity"
+exec "${CONTAINER_ENGINE:-docker}" run -d --rm --name "$NAME" -i --user="$(id -u):$(id -g)" --net=none -t -v "$PWD:/data" "$IMAGE" /bin/sh -c "sleep infinity"

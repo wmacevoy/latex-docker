@@ -10,4 +10,4 @@ parent_name="$(echo "$PARENT_NAME" | tr ' [:upper:]' '_[:lower:]')"
 IMAGE="$parent_name/latex:latest"
 NAME="$(echo "$IMAGE:daemon" | tr '/:' '--')"
 
-exec "${CONTAINER_ENGINE:-podman}" exec -it "$NAME" "$@"
+exec "${CONTAINER_ENGINE:-docker}" exec -it "$NAME" "$@"

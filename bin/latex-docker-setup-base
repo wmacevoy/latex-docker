@@ -11,14 +11,14 @@ BASE_DIR="$(dirname "$THIS_DIR")"
 BASE_NAME="$(basename "$BASE_DIR")"
 base_name="$(echo "$BASE_NAME" | tr ' [:upper:]' '_[:lower:]')"
 
-if ! which "${CONTAINER_ENGINE:-podman}" > /dev/null
+if ! which "${CONTAINER_ENGINE:-docker}" > /dev/null
 then
     # shellcheck disable=2016
     echo 'you must install docker (or podman and set $CONTAINER_ENGINE)...'
     exit 1
 fi
 
-(cd "$BASE_DIR/dockers" && ${CONTAINER_ENGINE:-podman} build -t "$base_name/latex-base:latest" latex-base)
+(cd "$BASE_DIR/dockers" && ${CONTAINER_ENGINE:-docker} build -t "$base_name/latex-base:latest" latex-base)
 
 if [ ! -f "$BASE_DIR/dockers/latex/Dockerfile" ] ; then
     echo "Creating a default (full texlive install) Dockerfile in $BASE_DIR/dockers/latex"

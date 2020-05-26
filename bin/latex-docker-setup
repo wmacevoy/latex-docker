@@ -14,10 +14,10 @@ base_name="$(echo "$BASE_NAME" | tr ' [:upper:]' '_[:lower:]')"
 
 "$THIS_DIR"/latex-docker-setup-base
 
-(cd "$BASE_DIR/dockers" && ${CONTAINER_ENGINE:-podman} build -t "$base_name/latex:latest" latex)
+(cd "$BASE_DIR/dockers" && ${CONTAINER_ENGINE:-docker} build -t "$base_name/latex:latest" latex)
 
 # shellcheck disable=SC2016
-CMDS="$(${CONTAINER_ENGINE:-podman} run --rm -a stdin -a stdout "$base_name/latex:latest" /bin/sh -c 'ls `echo $PATH  | cut -d: -f1`')"
+CMDS="$(${CONTAINER_ENGINE:-docker} run --rm -a stdin -a stdout "$base_name/latex:latest" /bin/sh -c 'ls `echo $PATH  | cut -d: -f1`')"
 
 cd "$BASE_DIR/bin" || exit 254
 if [ ! -f .gitignore ] ; then touch .gitignore ; fi
