@@ -1,7 +1,7 @@
 #!/bin/bash
 
 get_script_dir () {
-    pushd $(dirname "${BASH_SOURCE[0]}") >/dev/null
+    pushd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null
     pwd
     popd >/dev/null
 }
@@ -17,8 +17,8 @@ wctar () {
 
 THIS_DIR="$(get_script_dir)"
 
-cd $THIS_DIR
-cd ..
+cd "$THIS_DIR" || exit 254
+cd .. || exit 254
 
 curl -L https://github.com/Ma124/latex-docker/tarball/master | wctar -zxv --strip=1 '*/bin' '*/dockers'
 bin/latex-docker-setup
