@@ -1,16 +1,22 @@
-# fork of https://github.com/blang/latex-docker / Benedikt Lang <mail@blang.io> 
-FROM debian:stretch
+# fork of https://github.com/blang/latex-docker / Benedikt Lang <mail@blang.io>
+FROM debian:bookworm
 MAINTAINER Warren MacEvoy <wmacevoy@gmail.com>
-ENV DEBIAN_FRONTEND noninteractive
+ENV DEBIAN_FRONTEND=noninteractive
 
-# needed for basic build rules
-RUN apt-get update && apt-get install -y software-properties-common
-
-RUN apt-get install -y texlive asymptote
-RUN apt-get install -y wget xzdec gnupg latexmk
-RUN tlmgr init-usertree
+# base tools and full TeX Live stack (includes pdflatex/bibtex/etc.)
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+      ca-certificates \
+      make \
+      perl \
+      texlive-full \
+      asymptote \
+      latexmk \
+      xindy && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /data
-ENV HOME /home
+ENV HOME=/home
 
 VOLUME ["/data","/home"]

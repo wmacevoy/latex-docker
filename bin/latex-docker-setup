@@ -16,7 +16,8 @@ base_name="$(echo $BASE_NAME | tr ' [:upper:]' '_[:lower:]')"
 
 (cd "$BASE_DIR/dockers" && docker build -t "$base_name/latex:latest" latex)
 
-CMDS="$(docker run --rm -a stdin -a stdout "$base_name/latex:latest" /bin/sh -c 'ls `echo $PATH  | cut -d: -f1`')"
+# Collect commands from all PATH directories inside the container to expose them via host-side wrappers
+CMDS="$(docker run --rm -a stdin -a stdout "$base_name/latex:latest" /bin/sh -lc 'IFS=:; for d in $PATH; do [ -d "$d" ] && ls -1 "$d"; done | sort -u')"
 
 cd "$BASE_DIR/bin"
 if [ ! -f .gitignore ] ; then touch .gitignore ; fi
@@ -25,7 +26,7 @@ do
     /bin/rm -rf "$cmd"
     ln -s "latex-docker-command" "$cmd"
     chmod +x "$BASE_DIR/bin/$cmd"
-    if ! egrep -q "^$cmd$" .gitignore
+    if ! grep -Fxq "$cmd" .gitignore
     then
         echo "$cmd" >> .gitignore
     fi
