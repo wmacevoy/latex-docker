@@ -7,7 +7,12 @@ cd "$(dirname "$BASH_SOURCE[0]")" || exit 1
 mkdir -p test-tufte
 
 cd test-tufte
-curl -L https://github.com/Tufte-LaTeX/tufte-latex/tarball/master | tar zxv --strip=1
+if [ "${USE_REMOTE_TUFTE:-0}" = 1 ] ; then
+    curl -L https://github.com/Tufte-LaTeX/tufte-latex/tarball/master | tar zxv --strip=1
+else
+    # Use the checked-in snapshot for reproducibility
+    cp -R ../tufte/test-tufte/* .
+fi
 
 /bin/rm -rf bin
 mkdir -p bin

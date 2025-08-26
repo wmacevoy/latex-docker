@@ -17,7 +17,7 @@ then
     exit 1
 fi
 
-(cd "$BASE_DIR/dockers" && docker build -t "$base_name/latex-base:latest" latex-base)
+(cd "$BASE_DIR/dockers" && docker build --build-arg DEBIAN_SUITE="${DEBIAN_SUITE:-bookworm}" --build-arg TL_PACKAGES="${TL_PACKAGES:-texlive-full asymptote latexmk xindy}" -t "$base_name/latex-base:latest" latex-base)
 
 if [ ! -f "$BASE_DIR/dockers/latex/Dockerfile" ] ; then
     echo "Creating a default (full texlive install) Dockerfile in $BASE_DIR/dockers/latex"
