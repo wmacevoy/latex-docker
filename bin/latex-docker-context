@@ -1,17 +1,30 @@
-# find directory of this sourced context
+# Determine directory of this sourced file (bash & zsh)
+if [ -n "${BASH_VERSION-}" ]; then
+  __src="${BASH_SOURCE[0]}"
+  __dir="$(cd -- "$(dirname -- "$__src")" && pwd -P)"
+elif [ -n "${ZSH_VERSION-}" ]; then
+  # %N = current script or sourced file; :A = absolute; :h = dirname
+  __src="${(%):-%N}"
+  __dir="${__src:A:h}"
+else
+  # POSIX fallback (works for executed scripts; not reliable for "source")
+  __src="$0"
+  __dir="$(cd -- "$(dirname -- "$__src")" && pwd -P)"
+fi
 
-pushd $(dirname "${BASH_SOURCE[0]}") >/dev/null
-latex_docker_bin="$PWD"
-popd >/dev/null
-
-# remove directory from path
+# Remove all existing occurrences of $__dir from PATH (safe for both shells)
+# Wrap PATH with colons, strip :$__dir:, then un-wrap.
 PATH=":$PATH:"
-while [ "${PATH/:$latex_docker_bin:/:}" != "$PATH" ] ; do PATH="${PATH/:$latex_docker_bin:/:}"; done
+PATH="${PATH//:$__dir:/:}"
+PATH="${PATH#:}"
+PATH="${PATH%:}"
 
-# place directory first
-PATH="$latex_docker_bin${PATH%:}"
+# Prepend the directory
+PATH="$__dir${PATH:+:$PATH}"
+export PATH
 
-# invalidate cache
-hash -r
+# Invalidate command cache in bash or zsh
+hash -r 2>/dev/null || rehash 2>/dev/null || true
 
-
+# Clean up temps
+unset __src __dir

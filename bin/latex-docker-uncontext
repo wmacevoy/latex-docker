@@ -1,18 +1,32 @@
-# find directory of this sourced context
+# --- bash & zsh compatible: remove sourced-file's dir from PATH and rehash ---
 
-pushd $(dirname "${BASH_SOURCE[0]}") >/dev/null
-latex_docker_bin="$PWD"
-popd >/dev/null
+# 1) Locate the directory of this *sourced* file
+if [ -n "${BASH_VERSION-}" ]; then
+  __src="${BASH_SOURCE[0]}"
+  __dir="$(cd -- "$(dirname -- "$__src")" && pwd -P)"
+elif [ -n "${ZSH_VERSION-}" ]; then
+  # %N = current script or sourced file; :A = absolute; :h = dirname
+  __src="${(%):-%N}"
+  __dir="${__src:A:h}"
+else
+  # Fallback (best-effort if sourced detection isn't supported)
+  __src="$0"
+  __dir="$(cd -- "$(dirname -- "$__src")" && pwd -P)"
+fi
 
-# remove directory from path
+# 2) Remove all occurrences of $__dir from PATH (dedupe-safe)
 PATH=":$PATH:"
-while [ "${PATH/:$latex_docker_bin:/:}" != "$PATH" ] ; do PATH="${PATH/:$latex_docker_bin:/:}"; done
+while [ "${PATH/:$__dir:/:}" != "$PATH" ]; do
+  PATH="${PATH/:$__dir:/:}"
+done
 
-# remove extra colons
-PATH="${PATH%:}"
+# 3) Strip leading/trailing colons added by the wrapper
 PATH="${PATH#:}"
+PATH="${PATH%:}"
+export PATH
 
-# invalidate cache
-hash -r
+# 4) Invalidate command cache (bash uses hash -r; zsh uses rehash)
+hash -r 2>/dev/null || rehash 2>/dev/null || true
 
-
+# Cleanup
+unset __src __dir
