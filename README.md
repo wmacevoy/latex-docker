@@ -2,9 +2,11 @@
 
 ## What
 
-TexLive docker management
+TexLive docker management - deprecated.
 
 ## Why
+
+- Don't use it.  Dev Containers in Visual Studio Code or derivates (Cursor) are a better modern solution. This project is deprecated.
 
 - Simple. Use dockerized commands just like normal: `pdflatex main.tex`
 - Versioned.  Each project uses their own packages.  No conflicts
