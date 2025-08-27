@@ -64,9 +64,17 @@ After untarring/forking, build the base docker with
 ```bash
 bin/latex-docker-setup-base
 ```
-If you don't already have one, this creates a default scheme-full (5+GB, 2+ hours to build) latex Dockerfile in `dockers/latex/Dockerfile`.  It does not build it in this step (you can customize it in the next step).
+By default the base image uses a Debian suite and installs TeX Live via apt for reproducibility. You can override these at build time:
 
-This means if you want to just get a cup of coffee and not think about it, you can skip the customize step and you will have a full texlive to work from.
+```bash
+# optional overrides
+export DEBIAN_SUITE=bookworm      # or trixie, etc.
+export TL_PACKAGES="texlive-full asymptote latexmk xindy"  # apt package list
+
+bin/latex-docker-setup-base
+```
+
+If you don't already have one, this also creates a default `dockers/latex/Dockerfile` you can customize in the next step.
 
 ### Step 4 - customize (optional, but very good idea)
 
@@ -74,7 +82,7 @@ Edit the `dockers/latex/Dockerfile` file to decide what you want.  You don't hav
 
 **DO NOT** change the first FROM line - this was written specifically by setup-base so your dockers are project specific - they are named according to the folder of the project they are in.
 
-It can be tempting to just leave the `scheme-full` version.  However, it will be painful to get the gigantic (5+GB, 2+ hour) full texlive distribution which all your collaborators will have to repeat.  Spending a little time on this will pay off later for a lightweight tex that is easy to share.  I recommend starting from the "minimum" profile.  You can easily repeat your customization until you have everything you need.
+It can be tempting to just leave a "full" TeX Live. However, that’s large and slow for collaborators. Favor a smaller set via apt packages using the `TL_PACKAGES` override above. You can iterate quickly by adjusting the package list and re-running setup.
 
 ### Step 5 - setup
 
@@ -84,7 +92,7 @@ You can repeat this step as often as you like (after any updates to your project
 bin/latex-docker-setup
 ```
 
-This rebuilds the container and creates a number of symbolic links in your `bin` folder to all the texlive commands in your latex container. These symbolic link files are all appended to the .gitignore file in bin if not already present.
+This rebuilds the container and creates a number of symbolic links in your `bin` folder to all the texlive commands found in the container `PATH`. These link files are appended to `bin/.gitignore` if not already present.
 
 With the links you can run texlive commands directly, like
 
@@ -104,9 +112,8 @@ If you started from the minimum, you will have customize/setup several times bef
 
 Helpful hints:
 
-- Instead of editing a long `RUN tlmgr install <packages...>`, append a new `RUN` command.  The docker build caches `RUN` steps so you can add packages quickly as you find what your project needs.
-- Running `bin/tlmgr search --global --file <thing>` will help you find packages that provide `<thing>` so you can append `RUN tlmgr install <package>` to your docker.
-- Once it all works, you can merge it into one RUN line which simplifies the cache for docker.  Sort the packages alphabetically so it is easy for you to see if a package is already in the install list.
+- Prefer apt packages for TeX Live (`TL_PACKAGES`) over using `tlmgr` in image builds; this keeps the base reproducible and compatible with Debian’s TeX Live. You can still use `tlmgr` inside the container for diagnostics (e.g., `tlmgr search --global --file <thing>`), but install packages via apt.
+- The docker build caches `RUN` steps, so iterate by adjusting `TL_PACKAGES` or appending additional `RUN apt-get install ...` lines as needed, then consolidate later. Sort lists alphabetically to make maintenance easier.
 
 ### Step 7 - version control
 
@@ -133,6 +140,11 @@ After this, any time they want to work on the project,
 
 - source (**NOTICE DOT**) `. bin/latex-docker-context` to setup their path in the terminal they are using.
 - use the texlive commands, `pdflatex paper.tex` etc.
+
+### Tests and reproducibility
+
+- The tufte test at `tests/tufte/run` uses a checked-in snapshot by default for stability. To test against the latest upstream, set `USE_REMOTE_TUFTE=1` in the environment.
+- If LaTeX refuses to overwrite an existing PDF (e.g., "I can't write on file ..."), remove the existing PDF first. The test script does this automatically.
 
 ## FAQ
 
