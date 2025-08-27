@@ -37,20 +37,23 @@ custom latex docker in `dockers/latex/Dockerfile`.  This does over-write the fol
 
     bin/latex-docker
     bin/latex-docker-command
-    bin/latex-docker-context
+    bin/latex-docker-context-
+    bin/latex-docker-uncontext-    
     bin/latex-docker-rebuild
     bin/latex-docker-setup
     bin/latex-docker-setup-base
     dockers/latex-base/Dockerfile
     dockers/latex/Dockerfile.* (example templates)
 
-### Step 2 - context
+### Step 2 - context (deprecated)
 
 The commands in the bin folder can be executed explicitly from any working directory.  However the project bin is added to the front of your PATH with [**NOTICE DOT**]
 ```bash
 . bin/latex-docker-context
 ```
 in a terminal.  This command removes any occurances of the path first, so you can source context repeatedly.
+
+Deprecated: the setup puts too many things in the container context (like ls).  Just run the high level commands like `bin/make` or `bin/pdflatex` which will invoke the container environment.
 
 Sourcing uncontext,
 ```bash
