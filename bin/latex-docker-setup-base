@@ -26,82 +26,43 @@ if [ ! -f "$BASE_DIR/dockers/latex/Dockerfile" ] ; then
     cat >"$BASE_DIR/dockers/latex/Dockerfile" <<EOF
 FROM "$base_name/latex-base:latest"
 #
-# I know "scheme-full" is tempting, but three hours later you may have wished you picked out the packages...
-#
-# 1. Try using
-#
-#  tlmgr search --global --file <missing thing>
-#
-# to figure out what you need to install.
-#
-# 2. append extra RUN lines so docker can cache your build steps instead of re-running all of them.
-#
-# 3. Once you have the packages, combine them into one tlmgr install in sorted order to help docker
-#    cache them once and make it easier on your collaborators...
-#
-# 4. You can nullify multiline RUN lines by replacing inserting an 'echo skip' at the begining:
+# You can activate / nullify multiline RUN lines by using 'echo skip ||' or 'echo run &&' at the start.
 #
 #    # enabled
-#    RUN tlmgr install \\
-#        <package1> \\
-#        <package2>
+#    RUN echo <msg> run && ( \\
+#        cmd0 && \\
+#        cmd1 && \\
+#        cmd2 )
 #
 #    # disabled
-#    RUN echo skip tlmgr install \\
-#        <package1> \\
-#        <package2>
+#    RUN echo <msg> skip || ( \\
+#        cmd0 && \\
+#        cmd1 && \\
+#        cmd2 )
 #
-#    This format makes it easier to manage a package list in sorted order, which is the
-#    recommendation after you figure out all the packages to install through multiple
-#    RUN commands.
+#    This format makes it easier to manage what parts of a dockerfile are run.
 #
 
-#
-# scheme-full (5+GB, 2+ hours) - comment out to disable
-#
-RUN tlmgr install scheme-full
+RUN echo full texlive install run && (\\
+    apt-get update && \\
+    apt-get install -y --no-install-recommends \\
+      texlive-full \\
+      && \\
+    apt-get clean && \\
+    rm -rf /var/lib/apt/lists/* )
 
-#
-# min (remove echo skip below and comment out scheme-full above to use)
-#
-RUN echo skip tlmgr install \\
-    collection-fontsrecommended
-
-#
-# tufte (remove echo skip below and comment out scheme-full above to use)
-#
-RUN echo skip tlmgr install \\
-    asymptote \\
-    bera \\
-    booktabs \\
-    catchfile \\
-    ccicons \\
-    collection-fontsrecommended \\
-    fancyvrb \\
-    fpl \\
-    hardwrap \\
-    l3kernel \\
-    l3packages \\
-    lipsum \\
-    listings \\
-    mathpazo \\
-    microtype \\
-    ms \\
-    paralist \\
-    palatino \\
-    placeins \\
-    ragged2e \\
-    relenc \\
-    setspace \\
-    siunitx \\
-    soul \\
-    textcase \\
-    titlesec \\
-    tufte-latex \\
-    units \\
-    xcolor \\
-    xifthen \\
-    xindy \\
-    xkeyval
+RUN echo tufte latex install skip || (\\
+    apt-get update && \\
+    apt-get install -y --no-install-recommends \\
+        texlive-fonts-extra \\
+        texlive-fonts-recommended \\
+        texlive-latex-base \\
+        texlive-latex-extra \\
+        texlive-latex-recommended \\
+        texlive-plain-generic \\
+        texlive-science \\
+        && \\
+        apt-get clean && \\
+        rm -rf /var/lib/apt/lists/* )
 EOF
 fi

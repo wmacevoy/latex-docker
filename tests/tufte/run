@@ -1,17 +1,30 @@
 #!/usr/bin/env bash
+
 cd "$(dirname "$BASH_SOURCE[0]")" || exit 1
 
+reset=false
 
+while [ $# -gt 0 ] ; do
+    case "$1" in
+        --reset)
+            reset=true
+            shift
+            ;;
+        *)
+            echo unknown argument: "$1"
+            exit 1
+            ;;
+    esac
+done
 
-/bin/rm -rf test-tufte
+if [ $reset = true ] ; then
+    /bin/rm -rf test-tufte
+fi
+
 mkdir -p test-tufte
-
 cd test-tufte
-if [ "${USE_REMOTE_TUFTE:-0}" = 1 ] ; then
+if [ ! -f sample-book.tex ] ; then
     curl -L https://github.com/Tufte-LaTeX/tufte-latex/tarball/master | tar zxv --strip=1
-else
-    # Use the checked-in snapshot for reproducibility
-    cp -R ../tufte/test-tufte/* .
 fi
 
 /bin/rm -rf bin
@@ -24,8 +37,16 @@ cp ../../../dockers/latex-base/* dockers/latex-base
 
 /bin/rm -rf dockers/latex
 bin/latex-docker-setup-base
-sed -i "" -e 's/^RUN tlmgr/RUN echo skip tlmgr/' dockers/latex/Dockerfile
+# Flip FULL -> skip
+sed -i.bak \
+  -e 's/^[[:space:]]*\(RUN echo full texlive install\) run \&\&/\1 skip ||/' \
+  dockers/latex/Dockerfile
 
+# Flip TUFTE -> run
+sed -i.bak \
+  -e 's/^[[:space:]]*\(RUN echo tufte latex install\) skip ||/\1 run \&\&/' \
+  dockers/latex/Dockerfile
+  
 bin/latex-docker-setup
 
 /bin/rm -rf graphics/sine.pdf

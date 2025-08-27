@@ -2,7 +2,7 @@
 ARG DEBIAN_SUITE=bookworm
 FROM debian:${DEBIAN_SUITE}
 ENV DEBIAN_FRONTEND=noninteractive
-ARG TL_PACKAGES="texlive asymptote latexmk xindy"
+ARG TL_PACKAGES="texlive asymptote latexmk xindy ghostscript"
 
 # base tools and full TeX Live stack (includes pdflatex/bibtex/etc.)
 RUN apt-get update && \
